@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #060707;
+  color: #cbd5e1;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Victor Mono', monospace;
+}
+
+.screen {
+  max-height: 90%;
+  min-height: 90%;
+  min-width: 90%;
+  max-width: 90%;
+}
+
+.no-spin {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield; /* Otros navegadores */
+}
+
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
