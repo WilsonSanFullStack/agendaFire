@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../redux/reducer/index";
@@ -38,6 +38,12 @@ const Verificacion = () => {
     return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
   }, [user, emailVerified]);
 
+  // Esta función verifica si el correo ha sido verificado, actualizando solo el estado correspondiente
+  const checkEmailVerification = async () => {
+    window.location.reload()
+    navigate("/");
+  };
+
   useEffect(() => {
     if (emailVerified) {
       setTimeout(() => {
@@ -62,11 +68,14 @@ const Verificacion = () => {
       <div className="">
         {show && (
           <div>
-            <section>Correo enviado por favor espere</section>
+            <section>
+              Correo enviado por favor espere una vez realice la verificacion
+              del correo por favor oprima el siguiente boton e inicie sesion
+            </section>
 
             <section className="flex justify-center items-center m-1 font-bold uppercase">
               <button
-                onClick={() => window.location.reload()}
+                onClick={checkEmailVerification}
                 className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500"
               >
                 confirmar verificacion
