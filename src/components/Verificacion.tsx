@@ -6,6 +6,7 @@ import { RootState } from "../redux/reducer/index";
 import { auth } from "../firebase/auth";
 import { verificacionUser } from "../redux/actions/user";
 import { onAuthStateChanged } from "firebase/auth";
+import { deleteError } from "../redux/actions/deleteError";
 
 const Verificacion = () => {
   const navigate = useNavigate();
@@ -37,10 +38,12 @@ const Verificacion = () => {
 
     return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
   }, [user, emailVerified]);
-
+  useEffect(() => {
+    dispatch(deleteError());
+  }, []);
   // Esta función verifica si el correo ha sido verificado, actualizando solo el estado correspondiente
   const checkEmailVerification = async () => {
-    window.location.reload()
+    window.location.reload();
     navigate("/");
   };
 

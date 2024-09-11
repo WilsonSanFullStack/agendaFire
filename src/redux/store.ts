@@ -16,7 +16,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const persistConfig = {
   key: "agenda",
   storage,
-  blacklist: ['errorAxios'],
+  blacklist: ['errorAxios', ],
 };
 
 const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);

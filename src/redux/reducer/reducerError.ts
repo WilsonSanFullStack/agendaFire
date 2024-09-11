@@ -14,7 +14,7 @@ export const errorReducer = (
         ...state,
         errorAxios: action.payload,
       };
-      case actionTypes.deleteToken:
+      case actionTypes.deleteError:
       return {
         ...state,
         errorAxios: action.payload,

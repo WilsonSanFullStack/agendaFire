@@ -8,6 +8,10 @@ export const postSession = () => {
   return async (dispatch: Dispatch) => {
     try {
       await signOut(auth);
+      dispatch({
+        type: actionTypes.logout,
+        payload: ''
+      })
     } catch (error: unknown) {
       const errores = handleError(error);
       dispatch({

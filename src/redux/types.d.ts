@@ -12,8 +12,8 @@ export interface Clientes {
   comentatios: string[];
   creador: string;
   fechaRegistro: {
-    _seconds: number;
-    _nanoseconds: number;
+    seconds: number;
+    nanoseconds: number;
   };
   pagina: string;
 }
@@ -30,13 +30,11 @@ export interface initStateC {
 export interface User {
   admin: boolean;
   apellido: string;
-  email: string;
-  id?: number;
+  id: number;
   nombre: string;
-  password: string;
   registro?: {
-    _seconds: number;
-    _nanoseconds: number;
+    seconds: number;
+    nanoseconds: number;
   };
   userName: string;
 }
@@ -45,12 +43,16 @@ export interface actionGetUser extends Action {
   type:
     | typeof actionTypes.getUser
     | actionTypes.postUser
-    | actionTypes.deleteToken;
+    | actionTypes.deleteToken
+    | actionTypes.update
+    | actionTypes.getUserById;
   payload: User[];
 }
 export interface initStateU {
   getUser: User[] | null;
   postUser: User | null;
+  update: string | null;
+  user: User | null;
 }
 export type PostUser = string;
 // types for action inicio de sesion
@@ -58,7 +60,6 @@ export interface Login {
   email: string;
   password: string;
 }
-
 
 // types for action delete token
 
@@ -77,15 +78,13 @@ export interface ErrorAxios {
 
 export type error = string;
 export interface actionErrorAxios extends Action {
-  type: typeof actionTypes.error | actionTypes.deleteToken;
+  type: typeof actionTypes.error | actionTypes.deleteError;
   payload: ErrorAxios;
 }
 export interface initStateE {
   errorAxios: { message: string; status: number } | null;
 }
 export type ErrorAxios = string;
-
-
 
 // types for storeState
 export interface StoreState {

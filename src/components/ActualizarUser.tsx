@@ -1,10 +1,12 @@
 import { useState, ChangeEvent, useEffect } from "react";
-import { deleteTokens, postUser } from "../redux/actions/user";
+import { update } from "../redux/actions/user";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducer/index";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase/auth";
+import { deleteError } from "../redux/actions/deleteError";
 
 const ActualizarUser = () => {
   const navigate = useNavigate();
@@ -12,86 +14,94 @@ const ActualizarUser = () => {
   const response = useSelector((state: RootState) => state.user.postUser) ?? "";
   const [showForm, setShowForm] = useState(true);
   const [showRes, setShowRes] = useState(false);
-  const [registro, setRegistro] = useState({
+  const [user, setUser] = useState(auth.currentUser?.uid);
+  const errorAxios = useSelector(
+    (state: RootState) => state.errorAxios.errorAxios
+  );
+  const updates = useSelector((state: RootState) => state.user.update);
+  console.log(errorAxios);
+  const [actualizar, setActualizar] = useState({
     nombre: "",
     apellido: "",
     userName: "",
-    email: "",
     admin: false,
-    password: "",
-    confirmarPassword: "",
+    id: "",
   });
 
+  useEffect(() => {
+    const act = async () => {
+      await auth.updateCurrentUser(auth.currentUser);
+    };
+    act();
+    if (typeof user === "string") {
+      setActualizar({
+        ...actualizar,
+        id: user,
+      });
+    }
+  }, [actualizar.id]);
+
   const handlerNombre = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
+    setActualizar({
+      ...actualizar,
       nombre: event.target.value,
     });
   };
   const handlerApellido = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
+    setActualizar({
+      ...actualizar,
       apellido: event.target.value,
     });
   };
   const handlerUserName = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
+    setActualizar({
+      ...actualizar,
       userName: event.target.value,
-    });
-  };
-  const handlerEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      email: event.target.value,
-    });
-  };
-  const handlerPassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      password: event.target.value,
-    });
-  };
-  const handlerConfirmarPassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      confirmarPassword: event.target.value,
     });
   };
 
   const handlerSubmit = (event: React.FormEvent) => {
     event?.preventDefault();
     setShowForm(false);
-    dispatch(postUser(registro));
+    dispatch(update(actualizar));
     setTimeout(() => {
       setShowRes(true);
     }, 500);
   };
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (response === "usuario creado" ) {
-  //       dispatch(deleteTokens())
-  //       return navigate("/");
-  //     } else {
-  //       setShowForm(true);
-  //     }
-  //   }, 2500);
-  // }, [response]);
-
+  useEffect(() => {
+    if (errorAxios?.message) {
+      setShowForm(true);
+    } else if (updates === "usuario creado") {
+      navigate("/home");
+    }
+  }, [dispatch,  updates]);
+  useEffect(() => {
+    dispatch(deleteError());
+  }, [actualizar]);
   return (
     <div className=" min-h-screen">
       {showForm && (
         <div className=" flex justify-center items-center min-h-screen">
+          <section>
+            {errorAxios && (
+              <div className="text-center bg-gray-900 m-2 p-2 rounded-lg">
+                <section className="flex">
+                  <p className="mx-2">mensaje</p>
+                  <p className="text-red-500 font-bold">{errorAxios.message}</p>
+                </section>
+              </div>
+            )}
+          </section>
           <form onSubmit={handlerSubmit}>
             <div>
               <section className="text-center text-4xl font-bold">
-                Registro
+                Actualizacion de usuario
               </section>
               <section className="flex justify-center items-center m-1 ">
                 <input
                   type="text"
                   placeholder="escriba su nombre"
-                  value={registro.nombre}
+                  value={actualizar.nombre}
                   name="nombre"
                   onChange={handlerNombre}
                   className="text-black font-bold text-center border-gray-600 border-2 "
@@ -102,7 +112,7 @@ const ActualizarUser = () => {
                 <input
                   type="text"
                   placeholder="escriba su apellido"
-                  value={registro.apellido}
+                  value={actualizar.apellido}
                   name="apellido"
                   onChange={handlerApellido}
                   className="text-black font-bold text-center border-gray-600 border-2 "
@@ -113,51 +123,18 @@ const ActualizarUser = () => {
                 <input
                   type="text"
                   placeholder="como te llamamos"
-                  value={registro.userName}
+                  value={actualizar.userName}
                   name="userName"
                   onChange={handlerUserName}
                   className="text-black font-bold text-center border-gray-600 border-2 "
                 />
               </section>
 
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="text"
-                  placeholder="escriba un correo"
-                  value={registro.email}
-                  name="email"
-                  onChange={handlerEmail}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="password"
-                  placeholder="digite una contraseña"
-                  value={registro.password}
-                  name="password"
-                  onChange={handlerPassword}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="password"
-                  placeholder="Repita la contraseña"
-                  value={registro.confirmarPassword}
-                  name="confirmarPassword"
-                  onChange={handlerConfirmarPassword}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
               <section className="flex justify-center items-center">
                 <section className=" flex justify-center items-center m-1 font-bold uppercase">
-                    <button className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500">
-                      Registrar
-                    </button>
+                  <button className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500">
+                    Actualizar
+                  </button>
                 </section>
                 <section className=" m-1 font-bold uppercase">
                   <Link to={"/"}>

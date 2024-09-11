@@ -6,14 +6,39 @@ import { Dispatch } from "redux";
 import { auth } from "../firebase/auth";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import { getUserByUID } from "../redux/actions/user";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducer/index";
+import { deleteError } from "../redux/actions/deleteError";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch<Dispatch<any>>();
   const navigate = useNavigate();
+  const [user, setUser] = useState("");
+  const errorAxios = useSelector(
+    (state: RootState) => state.errorAxios.errorAxios
+  );
+  const getUserById = useSelector((state: RootState) => state.user.user);
+
+  useEffect(() => {
+    dispatch(deleteError());
+  }, [user]);
+
+  useEffect(() => {
+    const act = async () => {
+      await auth.updateCurrentUser(auth.currentUser);
+    };
+    act();
+    if (typeof user === "string") {
+      if (typeof auth.currentUser?.uid === "string") {
+        setUser(auth.currentUser?.uid);
+      }
+    }
+  }, [user]);
 
   const handleLogout = async () => {
-      dispatch(postSession());
+    dispatch(postSession());
   };
 
   useEffect(() => {
@@ -25,6 +50,24 @@ const NavBar = () => {
 
     return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
   }, []);
+
+  useEffect(() => {
+    if (
+      typeof auth.currentUser?.uid === "string" &&
+      user === auth.currentUser?.uid
+    ) {
+      dispatch(getUserByUID(user));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (
+      errorAxios?.message ===
+      "No se encontró el usuario con el UID proporcionado."
+    ) {
+      navigate("/actualizar");
+    }
+  }, [errorAxios]);
   return (
     <nav className="px-10 fixed top-0 min-w-full">
       <ul className="flex list-none justify-between items-center h-9 opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
@@ -62,7 +105,9 @@ const NavBar = () => {
             onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown
             // Toggle dropdown
           >
-            {auth.currentUser?.email?.split("@")[0] || "Usuario"}
+            {getUserById !== null && Array.isArray(getUserById) === false
+              ? getUserById.userName
+              : "Update"}
           </button>
 
           {/* Dropdown menu */}

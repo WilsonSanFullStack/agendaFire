@@ -4,6 +4,9 @@ export enum actionTypes {
   postUser="postUser",
   postInit='postInit',
   deleteToken='deleteToken',
+  deleteError='deleteError',
   logout='logout',
-  error='error'
+  error='error',
+  update='update',
+  getUserById='getUserById'
 }

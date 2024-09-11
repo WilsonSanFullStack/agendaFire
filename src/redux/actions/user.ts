@@ -3,7 +3,14 @@ import { actionTypes } from "../action";
 import { Login } from "../types";
 import { handleError } from "../../assets/errorHelper";
 import { DB } from "../../firebase/db";
-import { collection, getDocs } from "firebase/firestore/lite";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  setDoc,
+  doc,
+  serverTimestamp
+} from "firebase/firestore/lite";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -16,6 +23,50 @@ export const postUser = (login: Login) => {
     try {
       await createUserWithEmailAndPassword(auth, login.email, login.password);
     } catch (error: unknown) {
+      const errores = handleError(error);
+      dispatch({
+        type: actionTypes.error,
+        payload: errores,
+      });
+    }
+  };
+};
+interface Actualizar {
+  nombre: string;
+  apellido: string;
+  userName: string;
+  admin: boolean;
+  id: string;
+}
+
+export const update = (actualizar: Actualizar) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const userDocRef = doc(DB, "usuarios", actualizar.id);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        console.log("first");
+        dispatch({
+          type: actionTypes.error,
+          payload: { message: "El usuario ya existe en la base de datos." },
+        });
+      } else {
+        const actualizarRef = doc(DB, "usuarios", actualizar.id);
+        await setDoc(actualizarRef, {
+          nombre: actualizar.nombre,
+          apellido: actualizar.apellido,
+          userName: actualizar.userName,
+          admin: actualizar.admin,
+          id: actualizar.id,
+          registro: serverTimestamp()
+        });
+        dispatch({
+          type: actionTypes.update,
+          payload: "usuario creado",
+        });
+      }
+    } catch (error) {
+      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -62,12 +113,45 @@ export const getUser = () => {
         return cityList;
       }
       const user = await getCities();
-      console.log(user);
       dispatch({
         type: actionTypes.getUser,
         payload: user,
       });
     } catch (error: unknown) {
+      const errores = handleError(error);
+      dispatch({
+        type: actionTypes.error,
+        payload: errores,
+      });
+    }
+  };
+};
+
+export const getUserByUID = (user: string) => {
+  return async (dispatch: Dispatch) => {
+    console.log('user en getUserById', user)
+    try {
+      // Crear referencia al documento específico usando el UID
+      const userDocRef = doc(DB, "usuarios", user);
+      
+      // Obtener el documento
+      console.log('user referencia', userDocRef)
+      const userDocSnapshot = await getDoc(userDocRef);
+      console.log('user. userDocSnapshot.data() ',userDocSnapshot.data())
+      if (userDocSnapshot.exists()) {
+        const userData = userDocSnapshot.data(); // Obtener los datos del documento
+        dispatch({
+          type: actionTypes.getUserById,
+          payload: userData,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.error,
+          payload: {message: "No se encontró el usuario con el UID proporcionado."},
+        });
+      }
+    } catch (error: unknown) {
+      console.log('error en user', error)
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,

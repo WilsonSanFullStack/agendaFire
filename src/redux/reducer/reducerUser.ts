@@ -4,6 +4,8 @@ import { initStateU,  actionGetUser } from "../types";
 const initialState: initStateU = {
   getUser: null,
   postUser: null,
+  update: null,
+  user: null
 };
 export const userReducer = (
   state: initStateU = initialState,
@@ -26,6 +28,17 @@ export const userReducer = (
         return {
           ...state,
           postUser: action.payload
+        }
+      case actionTypes.update:
+        return {
+          ...state,
+          update: action.payload
+        }
+
+      case actionTypes.getUserById:
+        return {
+          ...state,
+          user: action.payload
         }
 
     default:

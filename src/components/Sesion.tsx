@@ -6,6 +6,7 @@ import { Dispatch } from "redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducer/index";
 import { auth } from "../firebase/auth";
+import { deleteError } from "../redux/actions/deleteError";
 
 const Sesion = () => {
   const navigate = useNavigate();
@@ -20,6 +21,9 @@ const Sesion = () => {
     password: "",
   });
   const [showForm, setShowForm] = useState(true);
+  useEffect(() => {
+    dispatch(deleteError());
+  }, [login]);
 
   const handlerEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setLogin({

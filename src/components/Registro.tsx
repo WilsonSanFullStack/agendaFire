@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducer/index";
 import { auth } from "../firebase/auth";
 import { postUser } from "../redux/actions/user";
+import { deleteError } from "../redux/actions/deleteError";
 
 const Registro = () => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ const Registro = () => {
     password: "",
   });
   const [showForm, setShowForm] = useState(true);
-
+  useEffect(() => {
+    dispatch(deleteError());
+  }, [login]);
   const handlerEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setLogin({
       ...login,
@@ -43,18 +46,18 @@ const Registro = () => {
   };
   useEffect(() => {
     setTimeout(() => {
-      if (auth.currentUser?.email ) {
+      if (auth.currentUser?.email) {
         setLogin({
           email: "",
           password: "",
-        })
-          return navigate("/verificacion");
+        });
+        return navigate("/verificacion");
       } else if (errorAxios?.message) {
         setShowForm(true);
         setInit(false);
       }
     }, 1000);
-  }, [ init, errorAxios]);
+  }, [init, errorAxios]);
   return (
     <div className="min-h-screen flex justify-center items-center">
       {showForm && (
