@@ -1,19 +1,20 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import Home from "./components/Home";
-import ActualizarUser from "./components/ActualizarUser";
-import Inicio from "./components/Inicio";
-import Sesion from "./components/Sesion";
-import NavBar from "./components/NavBar";
-import RegistroClientes from "./components/RegistroClientes";
-import Registro from "./components/Registro";
-import Verificacion from "./components/Verificacion";
-
-
+import Home from "./components/vistas/Home";
+import ActualizarUser from "./components/formularios/ActualizarUser";
+import Inicio from "./components/vistas/Inicio";
+import Sesion from "./components/formularios/Sesion";
+import NavBar from "./components/resources/NavBar";
+import RegistroClientes from "./components/formularios/RegistroClientes";
+import Registro from "./components/formularios/Registro";
+import Verificacion from "./components/vistas/Verificacion";
+import RegistroPagina from "./components/formularios/RegistrarPagina";
+import { NotFound } from "./components/resources/NotFound";
 
 function App() {
   const location = useLocation();
+
   // rutas donde la Navbar  no deberia aparecer
-  const excludeNavPaths = ["/", "/registro", "/sesion" , "/verificacion"];
+  const excludeNavPaths = ["/", "/registro", "/sesion", "/verificacion", '/404'];
   return (
     <div className="">
       {!excludeNavPaths.includes(location.pathname) && <NavBar />}
@@ -24,8 +25,9 @@ function App() {
         <Route path="/sesion" element={<Sesion />} />
         <Route path="/verificacion" element={<Verificacion />} />
         <Route path="/actualizar" element={<ActualizarUser />} />
-        
         <Route path="/clientes" element={<RegistroClientes />} />
+        <Route path="/pagina" element={<RegistroPagina />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

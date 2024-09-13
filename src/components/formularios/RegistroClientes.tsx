@@ -1,17 +1,38 @@
-import { useState, ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, ChangeEvent, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { RootState } from "../../redux/reducer/index";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
+import { getPagina } from "../../redux/actions/pagina";
 
 const RegistroClientes = () => {
+  const dispatch = useDispatch<Dispatch<any>>();
   const [showForm, setShowForm] = useState(true);
+  const getUserById = useSelector((state: RootState) => state.user.user);
+  const paginas = useSelector((state: RootState) => state.pagina.pagina);
   const [registro, setRegistro] = useState({
     nombre: "",
     userName: "",
     nacionalidad: "",
     edad: "",
     pagina: "",
-    creador: "no necesita handler",
-    link: ''
+    creador: "",
+    link: "",
   });
+  console.log(registro.creador);
+  useEffect(() => {
+    dispatch(getPagina());
+  }, []);
+console.log(paginas)
+  useEffect(() => {
+    if (getUserById !== null && Array.isArray(getUserById) === false) {
+      setRegistro({
+        ...registro,
+        creador: getUserById.userName,
+      });
+    }
+  }, [getUserById]);
 
   const handlerNombre = (event: ChangeEvent<HTMLInputElement>) => {
     setRegistro({
@@ -71,7 +92,7 @@ const RegistroClientes = () => {
           <form onSubmit={handlerSubmit}>
             <div>
               <section className="text-center text-4xl font-bold">
-                Registrar Cliente Nuevo
+                Registrar Cliente
               </section>
               <section className="flex justify-center items-center m-1 ">
                 <input
@@ -119,14 +140,16 @@ const RegistroClientes = () => {
               </section>
 
               <section className="flex justify-center items-center m-1 ">
-                {/* <input
-                  type="password"
-                  placeholder="digite una contraseña"
-                  value={registro.password}
-                  name="password"
-                  onChange={handlerPassword}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                /> */}
+                {paginas ? (
+                  <select name="" id="" className="text-black font-bold">
+                    <option value="" hidden>
+                      Selecione una pagina
+                    </option>
+                    {paginas.map((pag, x) => {
+                      return(<option key={x+1} className="text-black font-bold active:bg-gray-200">{pag.pagina}</option>)
+                    })}
+                  </select>
+                ) : <p>Registre una pagina</p>}
               </section>
               <section className="flex justify-center items-center m-1 ">
                 <input

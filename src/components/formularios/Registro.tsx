@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducer/index";
-import { auth } from "../firebase/auth";
-import { postUser } from "../redux/actions/user";
-import { deleteError } from "../redux/actions/deleteError";
+import { RootState } from "../../redux/reducer/index";
+import { auth } from "../../firebase/auth";
+import { postUser } from "../../redux/actions/user";
+import { deleteError } from "../../redux/actions/deleteError";
 
 const Registro = () => {
   const navigate = useNavigate();

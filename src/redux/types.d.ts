@@ -85,10 +85,21 @@ export interface initStateE {
   errorAxios: { message: string; status: number } | null;
 }
 export type ErrorAxios = string;
+// types for action errores
+export type  Pagina = string
+
+export interface actionPagina extends Action {
+  type: typeof actionTypes.pagina
+  payload: [{pagina: string}];
+}
+export interface initStateP {
+  pagina: [{pagina: string}] | null;
+}
 
 // types for storeState
 export interface StoreState {
   clientes: initStateC;
   user: initStateU;
+  pagina: initStateP
   errorAxios: initStateE;
 }

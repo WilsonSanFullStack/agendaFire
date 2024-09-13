@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { postSession } from "../redux/actions/session";
+import { postSession } from "../../redux/actions/session";
 import { Dispatch } from "redux";
-import { auth } from "../firebase/auth";
+import { auth } from "../../firebase/auth";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { getUserByUID } from "../redux/actions/user";
+import { getUserByUID } from "../../redux/actions/user";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducer/index";
-import { deleteError } from "../redux/actions/deleteError";
+import { RootState } from "../../redux/reducer/index";
+import { deleteError } from "../../redux/actions/deleteError";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownRegistro, setDropdownRegistro] = useState(false);
   const dispatch = useDispatch<Dispatch<any>>();
   const navigate = useNavigate();
   const [user, setUser] = useState("");
@@ -39,17 +39,8 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     dispatch(postSession());
+    navigate("/");
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        navigate("/");
-      }
-    });
-
-    return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
-  }, []);
 
   useEffect(() => {
     if (
@@ -67,10 +58,11 @@ const NavBar = () => {
     ) {
       navigate("/actualizar");
     }
-  }, [errorAxios]);
+  }, [errorAxios, getUserById]);
+
   return (
     <nav className="px-10 fixed top-0 min-w-full">
-      <ul className="flex list-none justify-between items-center h-9 opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
+      <ul className="flex list-none justify-between items-center h-9 opacity-20 hover:opacity-100 transition-opacity duration-300 ease-in-out">
         <Link to={"/home"}>
           <li className="inline-block items-center">
             <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500 hover:border-2 border-slate-950 rounded-lg px-1">
@@ -92,16 +84,41 @@ const NavBar = () => {
             </button>
           </li>
         </Link>
-        <Link to={"/clientes"}>
-          <li className="inline-block items-center">
-            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
-              registro
-            </button>
-          </li>
-        </Link>
+
+        <li className="inline-block items-center">
+          <button
+            onClick={() => setDropdownRegistro(!dropdownRegistro)} // Toggle dropdown
+            className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1"
+          >
+            registro
+          </button>
+          {/* Dropdown menu */}
+          <div
+            onMouseLeave={() => setDropdownRegistro(!dropdownRegistro)}
+            className={`${
+              dropdownRegistro ? "block" : "hidden"
+            } absolute right-52 bg-white shadow-lg rounded-lg mt-1 w-28 z-10 p-2 text-black`}
+          >
+            <ul className="text-center text-xs">
+              <Link to={"/clientes"}>
+                <li className=" p-2 hover:bg-gray-200">
+                  <button className="w-full text-center">Cliente</button>
+                </li>
+              </Link>
+
+              <Link to={"/pagina"}>
+                <li className="p-2 hover:bg-gray-200">
+                  <button className="w-full text-center">Pagina</button>
+                </li>
+              </Link>
+              {/* Aquí puedes agregar más opciones si deseas */}
+            </ul>
+          </div>
+        </li>
+
         <li className="relative">
           <button
-            className="uppercase border-2 hover:bg-green-600 active:bg-blue-500 border-slate-950 rounded-lg px-2 py-1"
+            className="uppercase border-2 hover:bg-green-600 active:bg-blue-500 border-slate-950 rounded-lg px-2"
             onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown
             // Toggle dropdown
           >
@@ -112,13 +129,14 @@ const NavBar = () => {
 
           {/* Dropdown menu */}
           <div
+            onMouseLeave={() => setDropdownOpen(!dropdownOpen)}
             className={`${
               dropdownOpen ? "block" : "hidden"
-            } absolute right-0 bg-white shadow-lg rounded-lg mt-1 w-40 z-10`}
+            } absolute right-0 bg-white shadow-lg rounded-lg mt-1 w-28 z-10 text-black`}
           >
-            <ul className="text-left">
+            <ul className="text-center text-xs">
               <li className="p-2 hover:bg-gray-100">
-                <button onClick={handleLogout} className="w-full text-left">
+                <button onClick={handleLogout} className="w-full text-center">
                   Cerrar sesión
                 </button>
               </li>

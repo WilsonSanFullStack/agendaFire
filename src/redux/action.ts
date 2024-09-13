@@ -8,5 +8,6 @@ export enum actionTypes {
   logout='logout',
   error='error',
   update='update',
-  getUserById='getUserById'
+  getUserById='getUserById',
+  pagina='pagina',
 }

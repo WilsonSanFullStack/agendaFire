@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import { getClientes } from "../redux/actions/clientes";
+import { getClientes } from "../../redux/actions/clientes";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
-import { RootState } from "../redux/reducer/index";
+import { RootState } from "../../redux/reducer/index";
 
 const Home = () => {
   const dispatch = useDispatch<Dispatch<any>>();
@@ -10,9 +10,8 @@ const Home = () => {
   const clientes = useSelector(
     (state: RootState) => state.clientes.getClientes
   );
-  const user = useSelector((state: RootState) => state.user.getUser);
 
-console.log(user)
+
   return (
     <div className="text-center items-center p-2 min-h-screen  pt-12">
       <h1 className="text-slate-50 text-3xl">hola soy el home</h1>

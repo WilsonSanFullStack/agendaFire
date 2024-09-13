@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { RootState } from "../redux/reducer/index";
-import { auth } from "../firebase/auth";
-import { verificacionUser } from "../redux/actions/user";
+import { RootState } from "../../redux/reducer/index";
+import { auth } from "../../firebase/auth";
+import { verificacionUser } from "../../redux/actions/user";
 import { onAuthStateChanged } from "firebase/auth";
-import { deleteError } from "../redux/actions/deleteError";
+import { deleteError } from "../../redux/actions/deleteError";
 
 const Verificacion = () => {
   const navigate = useNavigate();

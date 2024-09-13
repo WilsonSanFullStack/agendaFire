@@ -4,12 +4,14 @@ import { clientesReducer } from './reducerClientes';
 import { userReducer } from './reducerUser';
 import { errorReducer } from './reducerError';
 import { actionTypes } from '../action';
+import { paginaReducer } from './reducerPagina';
 
 
 
 const appReducer = combineReducers({
   clientes: clientesReducer,
   user: userReducer,
+  pagina: paginaReducer,
   errorAxios: errorReducer,
 });
 
@@ -18,6 +20,7 @@ const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: a
     return appReducer({
       clientes: undefined,
       user: undefined,    // Resetea el estado del usuario
+      pagina: undefined,
       errorAxios: undefined,  // Si también deseas reiniciar el error
     }, action);
   }

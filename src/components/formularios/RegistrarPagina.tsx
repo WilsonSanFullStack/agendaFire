@@ -1,14 +1,13 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { postInit } from "../redux/actions/iniciar";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducer/index";
-import { auth } from "../firebase/auth";
-import { deleteError } from "../redux/actions/deleteError";
+import { RootState } from "../../redux/reducer/index";
+import { deleteError } from "../../redux/actions/deleteError";
+import { postPagina } from "../../redux/actions/pagina";
 
-const Sesion = () => {
+const RegistroPagina = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<Dispatch<any>>();
   const errorAxios = useSelector(
@@ -16,52 +15,31 @@ const Sesion = () => {
   );
 
   const [init, setInit] = useState(false);
-  const [login, setLogin] = useState({
-    email: "",
-    password: "",
-  });
+  const [pagina, setPagina] = useState("");
   const [showForm, setShowForm] = useState(true);
   useEffect(() => {
     dispatch(deleteError());
-  }, [login]);
-
-  const handlerEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setLogin({
-      ...login,
-      email: event.target.value,
-    });
+  }, [pagina]);
+  const handlerPagina = (event: ChangeEvent<HTMLInputElement>) => {
+    setPagina(event.target.value);
   };
 
-  const handlerPassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setLogin({
-      ...login,
-      password: event.target.value,
-    });
-  };
   const handlerSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setShowForm(false);
     setInit(true);
-    dispatch(postInit(login));
+    dispatch(postPagina(pagina));
   };
   useEffect(() => {
     setTimeout(() => {
-      if (auth.currentUser?.email) {
-        setLogin({
-          email: "",
-          password: "",
-        });
-        if (!auth.currentUser?.emailVerified) {
-          navigate("/verificacion");
-        } else {
-          return navigate("/home");
-        }
-      } else if (errorAxios?.message) {
+      if (errorAxios?.message) {
         setShowForm(true);
         setInit(false);
+      } else if (init) {
+        navigate('/home')
       }
     }, 1000);
-  }, [init, errorAxios]);
+  }, [init]);
   return (
     <div className="min-h-screen flex justify-center items-center">
       {showForm && (
@@ -81,21 +59,10 @@ const Sesion = () => {
               <section className="flex justify-center items-center m-1 ">
                 <input
                   type="text"
-                  placeholder="escriba su Email"
-                  value={login.email}
+                  placeholder="Nombre de la Pagina"
+                  value={pagina}
                   name="nombre"
-                  onChange={handlerEmail}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="password"
-                  placeholder="escriba su password"
-                  value={login.password}
-                  name="nombre"
-                  onChange={handlerPassword}
+                  onChange={handlerPagina}
                   className="text-black font-bold text-center border-gray-600 border-2 "
                 />
               </section>
@@ -106,7 +73,7 @@ const Sesion = () => {
                     type="submit"
                     className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500"
                   >
-                    Iniciar Sesion
+                    Registrar
                   </button>
                 </section>
                 <section className=" m-1 font-bold uppercase">
@@ -123,11 +90,11 @@ const Sesion = () => {
       )}
       {init && (
         <div>
-          <h1>iniciando sesion</h1>
+          <h1>Registrando Pagina</h1>
         </div>
       )}
     </div>
   );
 };
 
-export default Sesion;
+export default RegistroPagina;

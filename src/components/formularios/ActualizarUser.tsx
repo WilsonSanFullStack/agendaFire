@@ -1,12 +1,12 @@
 import { useState, ChangeEvent, useEffect } from "react";
-import { update } from "../redux/actions/user";
+import { update } from "../../redux/actions/user";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducer/index";
+import { RootState } from "../../redux/reducer/index";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase/auth";
-import { deleteError } from "../redux/actions/deleteError";
+import { auth } from "../../firebase/auth";
+import { deleteError } from "../../redux/actions/deleteError";
 
 const ActualizarUser = () => {
   const navigate = useNavigate();

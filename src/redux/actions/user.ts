@@ -45,7 +45,6 @@ export const update = (actualizar: Actualizar) => {
       const userDocRef = doc(DB, "usuarios", actualizar.id);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
-        console.log("first");
         dispatch({
           type: actionTypes.error,
           payload: { message: "El usuario ya existe en la base de datos." },
@@ -129,15 +128,12 @@ export const getUser = () => {
 
 export const getUserByUID = (user: string) => {
   return async (dispatch: Dispatch) => {
-    console.log('user en getUserById', user)
     try {
       // Crear referencia al documento específico usando el UID
       const userDocRef = doc(DB, "usuarios", user);
       
       // Obtener el documento
-      console.log('user referencia', userDocRef)
       const userDocSnapshot = await getDoc(userDocRef);
-      console.log('user. userDocSnapshot.data() ',userDocSnapshot.data())
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data(); // Obtener los datos del documento
         dispatch({
@@ -151,7 +147,6 @@ export const getUserByUID = (user: string) => {
         });
       }
     } catch (error: unknown) {
-      console.log('error en user', error)
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
