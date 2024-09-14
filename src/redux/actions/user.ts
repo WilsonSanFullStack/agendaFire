@@ -9,7 +9,7 @@ import {
   getDoc,
   setDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
 } from "firebase/firestore/lite";
 import {
   createUserWithEmailAndPassword,
@@ -57,7 +57,7 @@ export const update = (actualizar: Actualizar) => {
           userName: actualizar.userName,
           admin: actualizar.admin,
           id: actualizar.id,
-          registro: serverTimestamp()
+          registro: serverTimestamp(),
         });
         dispatch({
           type: actionTypes.update,
@@ -131,7 +131,7 @@ export const getUserByUID = (user: string) => {
     try {
       // Crear referencia al documento específico usando el UID
       const userDocRef = doc(DB, "usuarios", user);
-      
+
       // Obtener el documento
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
@@ -143,7 +143,9 @@ export const getUserByUID = (user: string) => {
       } else {
         dispatch({
           type: actionTypes.error,
-          payload: {message: "No se encontró el usuario con el UID proporcionado."},
+          payload: {
+            message: "No se encontró el usuario con el UID proporcionado.",
+          },
         });
       }
     } catch (error: unknown) {

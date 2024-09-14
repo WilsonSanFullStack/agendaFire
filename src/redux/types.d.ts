@@ -3,18 +3,24 @@ import { Action } from "redux";
 
 export interface Clientes {
   nombre: string;
-  id: number;
   edad: number;
   userName: string;
   nacionalidad: string;
-  gustos: string[];
-  fetiches: string[];
-  comentatios: string[];
-  creador: string;
+  comentarios: string;
+  creador: string[];
   fechaRegistro: {
     seconds: number;
     nanoseconds: number;
   };
+  pagina: string;
+}
+export interface Cliente {
+  nombre: string;
+  edad: number;
+  userName: string;
+  nacionalidad: string;
+  comentarios: string;
+  creador: string;
   pagina: string;
 }
 // types for action get clientes

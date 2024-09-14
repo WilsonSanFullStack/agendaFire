@@ -60,6 +60,22 @@ const NavBar = () => {
     }
   }, [errorAxios, getUserById]);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Verificar si el usuario está autenticado
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAuthenticated(!user); // Si el usuario está autenticado, cambia el estado
+    });
+
+    return () => unsubscribe(); // Limpia el listener cuando se desmonta el componente
+  }, []);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+
   return (
     <nav className="px-10 fixed top-0 min-w-full">
       <ul className="flex list-none justify-between items-center h-9 opacity-20 hover:opacity-100 transition-opacity duration-300 ease-in-out">

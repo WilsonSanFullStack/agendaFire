@@ -11,7 +11,6 @@ const Home = () => {
     (state: RootState) => state.clientes.getClientes
   );
 
-
   return (
     <div className="text-center items-center p-2 min-h-screen  pt-12">
       <h1 className="text-slate-50 text-3xl">hola soy el home</h1>
@@ -32,57 +31,47 @@ const Home = () => {
       >
         get cliente
       </button>
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         {clientes?.map((clientes, x) => {
           const milliseconds =
             (clientes?.fechaRegistro?.seconds ?? 0) * 1000 +
             (clientes?.fechaRegistro?.nanoseconds ?? 0) / 1000000;
           const date = new Date(milliseconds);
           return (
-            <div key={x + 1}>
-              <p className=" text-white">{clientes?.id}</p>
+            <div
+              key={x + 1}
+              className="relative group items-center justify-center overflow-hidden cursor-pointer w-56 h-64 border rounded-lg"
+            >
+              {/* Parte frontal de la tarjeta */}
+              <div className="relative w-full h-full bg-gray-800 text-white shadow-lg rounded-lg group-hover:rotate-y-180 transition-transform duration-500 ease-in-out">
+                <div className="p-4 grid grid-cols-2 gap-2">
+                  <p>Nick:</p>
+                  <p>{clientes?.userName}</p>
+                  <p>Nombre:</p>
+                  <p>{clientes?.nombre}</p>
+                  <p>Página:</p>
+                  <p>{clientes?.pagina}</p>
+                  <p>Edad:</p>
+                  <p>{clientes?.edad}</p>
+                  <p>País:</p>
+                  <p>{clientes?.nacionalidad}</p>
+                  <p>Registrado:</p>
+                  {date && <p>{date?.toLocaleString()}</p>}
+                </div>
+              </div>
 
-              <p className="text-white">{clientes?.nombre}</p>
-              <p className="text-white">{clientes?.userName}</p>
-              <p className=" text-white">{clientes?.edad}</p>
-              <p className=" text-white">{clientes?.nacionalidad}</p>
-              <p className=" text-white">{clientes?.pagina}</p>
-              <section className=" text-white">
-                {clientes?.comentatios?.map((a, x) => {
-                  return (
-                    <p className="text-blue-500" key={x + 1}>
-                      {a}
-                    </p>
-                  );
-                })}
-              </section>
-              <section className=" text-white">
-                {clientes?.fetiches?.map((a, x) => {
-                  return (
-                    <p className="text-green-500" key={x + 1}>
-                      {a}
-                    </p>
-                  );
-                })}
-              </section>
-              <section className=" text-white">
-                {clientes?.gustos?.map((a, x) => {
-                  return (
-                    <p className="text-yellow-500" key={x + 1}>
-                      {a}
-                    </p>
-                  );
-                })}
-              </section>
-              <p className=" text-white">{clientes?.creador}</p>
-              {date && (
-                <p className=" text-white">{date?.toLocaleString()} UTC-5</p>
-              )}
+              {/* Parte trasera de la tarjeta */}
+              <div className="absolute inset-0 bg-gradient-to-b from-inherit via-current to-black">
+                <div className="absolute bg-gray-900 inset-0 flex flex-col  text-center translate-y-[90%] group-hover:translate-y-0 transition-all">
+                  <h2 className="top-0 mb-2">Comentarios</h2>
+                  <section className=" overflow-auto">
+                    {clientes?.comentarios}
+                  </section>
+                </div>
+              </div>
             </div>
           );
         })}
-        <div />
-
       </div>
     </div>
   );
