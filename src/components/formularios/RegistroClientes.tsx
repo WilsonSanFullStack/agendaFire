@@ -24,11 +24,11 @@ const RegistroClientes = () => {
     link: "",
     comentarios: "",
   });
-  console.log(registro);
+  
   useEffect(() => {
     dispatch(getPagina());
   }, []);
-  console.log(paginas);
+
   useEffect(() => {
     if (getUserById !== null && Array.isArray(getUserById) === false) {
       setRegistro({
@@ -93,10 +93,6 @@ const RegistroClientes = () => {
     setShowForm(false);
   };
 
-  console.log('error axisos', errorAxios?.message === undefined)
-  console.log('show Form', showForm === false)
-  console.log('show Form', showForm === false, 'error axisos', errorAxios?.message === undefined)
-  console.log('show Form', showForm === false && errorAxios?.message === undefined)
   useEffect(() => {
     if (errorAxios?.message) {
       setShowForm(true);

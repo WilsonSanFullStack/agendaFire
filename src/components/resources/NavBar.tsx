@@ -93,13 +93,6 @@ const NavBar = () => {
             </button>
           </li>
         </Link>
-        <Link to={"/home"}>
-          <li className="inline-block items-center">
-            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
-              clientes
-            </button>
-          </li>
-        </Link>
 
         <li className="inline-block items-center">
           <button

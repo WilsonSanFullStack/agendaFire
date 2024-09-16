@@ -1,8 +1,11 @@
+import { useState, ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getClientes } from "../../redux/actions/clientes";
+import { getClientes, getClientesBuscar, getClientesPag } from "../../redux/actions/clientes";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/reducer/index";
+import { TiZoomOutline } from "react-icons/ti";
+import { getPagina } from "../../redux/actions/pagina";
 
 const Home = () => {
   const dispatch = useDispatch<Dispatch<any>>();
@@ -10,23 +13,99 @@ const Home = () => {
   const clientes = useSelector(
     (state: RootState) => state.clientes.getClientes
   );
+  const paginas = useSelector((state: RootState) => state.pagina.pagina);
+  const getUserById = useSelector((state: RootState) => state.user.user);
+  const [pagina, setPagina] = useState(false);
 
+  useEffect(() => {
+    dispatch(getPagina());
+    
+  }, []);
+  const handleGetUser = () => {
+    if (getUserById !== null && Array.isArray(getUserById) === false) {
+      dispatch(getClientes(getUserById?.userName))
+    }
+  }
+  const handleGetUserByPag = (pag: string) => {
+    if (getUserById !== null && Array.isArray(getUserById) === false) {
+      dispatch(getClientesPag({userName: getUserById?.userName, pagina: pag}))
+    }
+  }
+  const [nick, setNick] = useState('');
+  const handleNick = (event: ChangeEvent<HTMLInputElement>) => {
+    setNick(event.target.value)
+  }
+  const handleBuscar = () => {
+    if (getUserById !== null && Array.isArray(getUserById) === false) {
+      dispatch(getClientesBuscar({userName: getUserById?.userName, nick: nick}))
+    }
+  }
+  console.log(clientes)
+  console.log(getUserById?.userName)
+  console.log(nick)
   return (
     <div className="text-center items-center p-2 min-h-screen  pt-12">
-      <h1 className="text-slate-50 text-3xl">hola soy el home</h1>
-      <h1 className="text-red-500">hola soy el home</h1>
+      <nav className="px-10 min-w-full bg-slate-500">
+        <ul className="flex list-none justify-between items-center h-9 ">
+          <li className="inline-block items-center">
+            <button
+              onClick={() => setPagina(!pagina)}
+              className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500 hover:border-2 border-slate-950 rounded-lg px-1"
+            >
+              pagina
+            </button>
+            <div
+              onMouseLeave={() => setPagina(!pagina)}
+              className={`${
+                pagina ? "block" : "hidden"
+              } absolute bg-white shadow-lg rounded-lg mt-1 w-auto h-auto z-10 p-2 text-black`}
+            >
+              <ul>
+                {paginas !== null &&
+                  paginas.map((pag, x) => {
+                    return (
+                      <li
+                        key={x + 1}
+                        className=" cursor-pointer m-0.5 hover:bg-gray-300"
+                      onClick={() => handleGetUserByPag(pag.pagina)}
+                      >
+                        {pag.pagina}
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          </li>
 
-      <div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui id neque
-          consequuntur cum odit suscipit ducimus deserunt nostrum unde, ab quas
-          voluptates et cupiditate delectus. Omnis eos nulla iste commodi?
-        </p>
-      </div>
+          <li className="flex items-center"
+          onChange={handleBuscar}>
+          <input
+                  type="text"
+                  placeholder="Nombre de Usuario"
+                  value={nick}
+                  name="userName"
+                  onChange={handleNick}
+                  className="text-black font-bold text-center border-gray-600 border-2 "
+                />
+            <TiZoomOutline className="text-black text-3xl" />
+          </li>
+
+          <li className="inline-block items-center">
+            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
+              nombre
+            </button>
+          </li>
+
+          <li className="inline-block items-center">
+            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
+              nick
+            </button>
+          </li>
+        </ul>
+      </nav>
+
       <button
-        onClick={() => {
-          dispatch(getClientes());
-        }}
+        onClick={handleGetUser}
         className="border-white border-2 p-1 "
       >
         get cliente
@@ -71,7 +150,7 @@ const Home = () => {
               </div>
             </div>
           );
-        })}
+        })}{clientes?.length === 0 && (<p>Registrar Clientes</p>)}
       </div>
     </div>
   );
