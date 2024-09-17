@@ -21,6 +21,7 @@ const RegistroClientes = () => {
     edad: 18,
     pagina: "",
     creador: "",
+    estafador: false,
     link: "",
     comentarios: "",
   });

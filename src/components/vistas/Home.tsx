@@ -1,11 +1,16 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { getClientes, getClientesBuscar, getClientesPag } from "../../redux/actions/clientes";
+import {
+  getClientes,
+  getClientesBuscar,
+  getClientesPag,
+} from "../../redux/actions/clientes";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../redux/reducer/index";
 import { TiZoomOutline } from "react-icons/ti";
 import { getPagina } from "../../redux/actions/pagina";
+import debounce from "lodash.debounce";
 
 const Home = () => {
   const dispatch = useDispatch<Dispatch<any>>();
@@ -19,30 +24,40 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getPagina());
-    
   }, []);
   const handleGetUser = () => {
     if (getUserById !== null && Array.isArray(getUserById) === false) {
-      dispatch(getClientes(getUserById?.userName))
+      dispatch(getClientes(getUserById?.userName));
     }
-  }
+  };
   const handleGetUserByPag = (pag: string) => {
     if (getUserById !== null && Array.isArray(getUserById) === false) {
-      dispatch(getClientesPag({userName: getUserById?.userName, pagina: pag}))
+      dispatch(
+        getClientesPag({ userName: getUserById?.userName, pagina: pag })
+      );
     }
-  }
-  const [nick, setNick] = useState('');
+  };
+  const [nick, setNick] = useState("");
+  const handleBuscar = useCallback(
+    debounce((nick) => {
+      if (getUserById !== null && Array.isArray(getUserById) === false) {
+        dispatch(
+          getClientesBuscar({ userName: getUserById?.userName, nick: nick })
+        );
+      }
+    }, 300),
+    [getUserById, dispatch]
+  );
   const handleNick = (event: ChangeEvent<HTMLInputElement>) => {
-    setNick(event.target.value)
+    const { value } = event.target;
+    setNick(value);
+    handleBuscar(value);
+  };
+  console.log(clientes);
+  if (getUserById !== null && Array.isArray(getUserById) === false) {
+    console.log(getUserById?.userName);
   }
-  const handleBuscar = () => {
-    if (getUserById !== null && Array.isArray(getUserById) === false) {
-      dispatch(getClientesBuscar({userName: getUserById?.userName, nick: nick}))
-    }
-  }
-  console.log(clientes)
-  console.log(getUserById?.userName)
-  console.log(nick)
+  console.log(nick);
   return (
     <div className="text-center items-center p-2 min-h-screen  pt-12">
       <nav className="px-10 min-w-full bg-slate-500">
@@ -67,7 +82,7 @@ const Home = () => {
                       <li
                         key={x + 1}
                         className=" cursor-pointer m-0.5 hover:bg-gray-300"
-                      onClick={() => handleGetUserByPag(pag.pagina)}
+                        onClick={() => handleGetUserByPag(pag.pagina)}
                       >
                         {pag.pagina}
                       </li>
@@ -77,16 +92,18 @@ const Home = () => {
             </div>
           </li>
 
-          <li className="flex items-center"
-          onChange={handleBuscar}>
-          <input
-                  type="text"
-                  placeholder="Nombre de Usuario"
-                  value={nick}
-                  name="userName"
-                  onChange={handleNick}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
+          <li
+            className="flex items-center"
+            // onChange={handleBuscar}
+          >
+            <input
+              type="text"
+              placeholder="Nombre de Usuario"
+              value={nick}
+              name="userName"
+              onChange={handleNick}
+              className="text-black font-bold text-center border-gray-600 border-2 "
+            />
             <TiZoomOutline className="text-black text-3xl" />
           </li>
 
@@ -104,10 +121,7 @@ const Home = () => {
         </ul>
       </nav>
 
-      <button
-        onClick={handleGetUser}
-        className="border-white border-2 p-1 "
-      >
+      <button onClick={handleGetUser} className="border-white border-2 p-1 ">
         get cliente
       </button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -143,14 +157,19 @@ const Home = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-inherit via-current to-black">
                 <div className="absolute bg-gray-900 inset-0 flex flex-col  text-center translate-y-[90%] group-hover:translate-y-0 transition-all">
                   <h2 className="top-0 mb-2">Comentarios</h2>
-                  <section className=" overflow-auto">
+                  <section className=" overflow-auto bg-slate-800 mb-8">
                     {clientes?.comentarios}
+                  </section>
+                  <section className="absolute bottom-0 w-full flex justify-between px-4 m-0.5">
+                    <button className="uppercase border border-white px-0.5 hover:rounded-lg">estafador</button>
+                    <button className="uppercase border border-white px-0.5 hover:rounded-lg">editar</button>
                   </section>
                 </div>
               </div>
             </div>
           );
-        })}{clientes?.length === 0 && (<p>Registrar Clientes</p>)}
+        })}
+        {clientes?.length === 0 && <p>Registrar Clientes</p>}
       </div>
     </div>
   );

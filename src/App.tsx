@@ -9,6 +9,7 @@ import Registro from "./components/formularios/Registro";
 import Verificacion from "./components/vistas/Verificacion";
 import RegistroPagina from "./components/formularios/RegistrarPagina";
 import { NotFound } from "./components/resources/NotFound";
+import { Estafador } from "./components/vistas/Estafador";
 
 function App() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function App() {
         <Route path="/actualizar" element={<ActualizarUser />} />
         <Route path="/clientes" element={<RegistroClientes />} />
         <Route path="/pagina" element={<RegistroPagina />} />
+        <Route path="/estafador" element={<Estafador />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

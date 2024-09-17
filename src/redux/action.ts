@@ -10,4 +10,5 @@ export enum actionTypes {
   update='update',
   getUserById='getUserById',
   pagina='pagina',
+  getEstafador='getEstafador',
 }

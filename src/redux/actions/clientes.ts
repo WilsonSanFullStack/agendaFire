@@ -9,6 +9,7 @@ import {
   endAt,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   serverTimestamp,
@@ -82,11 +83,11 @@ export const getClientesBuscar = ({ userName, nick }: Buscar) => {
       const clientesRef = collection(DB, "clientes");
       const q = query(
         clientesRef,
+        orderBy("userName"),
+        startAt(nick),
+        endAt(nick + "\uf8ff"),
         where("creador", "array-contains", userName),
-        where("userName", ">=", nick),
-        // orderBy("userName"),
-        // startAt(nick),
-        // endAt(nick + "\uf8ff")
+        // limit(2)
       );
       const data = await getDocs(q);
       const clientes = data.docs.map((doc) => doc.data());
@@ -133,6 +134,7 @@ export const postCliente = (registro: Cliente) => {
           comentarios: registro.comentarios,
           pagina: registro.pagina,
           creador: [registro.creador],
+          estafador: false,
           fechaRegistro: serverTimestamp(),
         });
       }
