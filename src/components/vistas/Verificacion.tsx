@@ -17,13 +17,11 @@ const Verificacion = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [user, setUser] = useState<any>(null); // Asegúrate de que el tipo sea correcto
   const handlerSubmit = () => {
-    console.log('first')
+
     if (user !== null) {
-      console.log('dos')
       dispatch(verificacionUser(user));
       dispatch(postSession());
       setTimeout(() =>{
-        console.log('tres')
         setShow(true);
         navigate('/')
       }, 500)

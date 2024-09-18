@@ -19,9 +19,6 @@ const ActualizarUser = () => {
     (state: RootState) => state.errorAxios.errorAxios
   );
   const updates = useSelector((state: RootState) => state.user.update);
-  if (user && auth.currentUser?.uid !== undefined) {
-    setUser(auth.currentUser?.uid);
-  }
   const [actualizar, setActualizar] = useState({
     nombre: "",
     apellido: "",
@@ -29,19 +26,21 @@ const ActualizarUser = () => {
     admin: false,
     id: "",
   });
-
   useEffect(() => {
-    const act = async () => {
-      await auth.updateCurrentUser(auth.currentUser);
-    };
-    act();
-    if (typeof user === "string") {
-      setActualizar({
-        ...actualizar,
-        id: user,
-      });
+    if (!user && auth.currentUser?.uid !== undefined) {
+      setUser(auth.currentUser?.uid);
     }
-  }, [actualizar.id]);
+  }, [actualizar, actualizar.id, user, auth])
+
+useEffect(() => {
+  if (typeof user === "string") {
+    setActualizar({
+      ...actualizar,
+      id: user,
+    });
+  }
+}, [user, actualizar.id]);
+
 
   const handlerNombre = (event: ChangeEvent<HTMLInputElement>) => {
     setActualizar({
@@ -76,7 +75,7 @@ const ActualizarUser = () => {
     } else if (updates === "usuario creado") {
       navigate("/home");
     }
-  }, [dispatch, updates]);
+  }, [dispatch, updates, errorAxios]);
   useEffect(() => {
     dispatch(deleteError());
   }, [actualizar]);
