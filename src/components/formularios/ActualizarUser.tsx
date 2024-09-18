@@ -14,12 +14,14 @@ const ActualizarUser = () => {
   const response = useSelector((state: RootState) => state.user.postUser) ?? "";
   const [showForm, setShowForm] = useState(true);
   const [showRes, setShowRes] = useState(false);
-  const [user, setUser] = useState(auth.currentUser?.uid);
+  const [user, setUser] = useState('');
   const errorAxios = useSelector(
     (state: RootState) => state.errorAxios.errorAxios
   );
   const updates = useSelector((state: RootState) => state.user.update);
-  setUser(auth.currentUser?.uid)
+  if (user && auth.currentUser?.uid !== undefined) {
+    setUser(auth.currentUser?.uid);
+  }
   const [actualizar, setActualizar] = useState({
     nombre: "",
     apellido: "",
@@ -74,7 +76,7 @@ const ActualizarUser = () => {
     } else if (updates === "usuario creado") {
       navigate("/home");
     }
-  }, [dispatch,  updates]);
+  }, [dispatch, updates]);
   useEffect(() => {
     dispatch(deleteError());
   }, [actualizar]);
