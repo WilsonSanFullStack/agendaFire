@@ -79,7 +79,6 @@ export const verificacionUser = (user: User) => {
     try {
       if (user !== null) {
         await sendEmailVerification(user);
-      } else {
       }
     } catch (error: unknown) {
       const errores = handleError(error);
