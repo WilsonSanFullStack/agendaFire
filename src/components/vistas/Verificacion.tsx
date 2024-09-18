@@ -14,7 +14,7 @@ const Verificacion = () => {
   const errorAxios = useSelector(
     (state: RootState) => state.errorAxios.errorAxios
   );
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [user, setUser] = useState<any>(null); // Asegúrate de que el tipo sea correcto
 console.log('uno')
