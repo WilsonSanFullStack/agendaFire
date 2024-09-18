@@ -19,7 +19,7 @@ const ActualizarUser = () => {
     (state: RootState) => state.errorAxios.errorAxios
   );
   const updates = useSelector((state: RootState) => state.user.update);
-  console.log(errorAxios);
+  setUser(auth.currentUser?.uid)
   const [actualizar, setActualizar] = useState({
     nombre: "",
     apellido: "",

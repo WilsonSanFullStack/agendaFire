@@ -9,7 +9,7 @@ import { getUserByUID } from "../../redux/actions/user";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducer/index";
 import { deleteError } from "../../redux/actions/deleteError";
-import { getEstafadores } from "../../redux/actions/estafadores";
+// import { getEstafadores } from "../../redux/actions/estafadores";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);

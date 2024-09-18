@@ -36,7 +36,6 @@ export const getClientes = (userName: string) => {
         payload: clientes,
       });
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -65,7 +64,6 @@ export const getClientesPag = ({ userName, pagina }: Props) => {
         payload: clientes,
       });
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -97,7 +95,6 @@ export const getClientesBuscar = ({ userName, nick }: Buscar) => {
         payload: clientes,
       });
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -139,7 +136,6 @@ export const postCliente = (registro: Cliente) => {
         });
       }
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -155,7 +151,6 @@ export const deleteCliente = (eliminar:string) => {
       await deleteDoc(deleteDocRef)
       
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,

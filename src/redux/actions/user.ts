@@ -65,7 +65,6 @@ export const update = (actualizar: Actualizar) => {
         });
       }
     } catch (error) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -81,7 +80,6 @@ export const verificacionUser = (user: User) => {
       if (user !== null) {
         await sendEmailVerification(user);
       } else {
-        console.log("error");
       }
     } catch (error: unknown) {
       const errores = handleError(error);

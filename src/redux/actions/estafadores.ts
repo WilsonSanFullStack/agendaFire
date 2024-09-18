@@ -27,7 +27,6 @@ export const getEstafadores = () => {
         payload: estafadores,
       });
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -75,7 +74,6 @@ export const postEstafadores = (registro: Estafador) => {
         fechaRegistro: serverTimestamp()
       });
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
@@ -91,7 +89,6 @@ export const deleteEstafador = (eliminar:string) => {
       const deleteDocRef = doc(DB, 'estafadores', eliminar)
       await deleteDoc(deleteDocRef)
     } catch (error: unknown) {
-      console.log(error);
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,

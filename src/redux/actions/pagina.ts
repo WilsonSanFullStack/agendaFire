@@ -41,7 +41,6 @@ export const getPagina = () => {
         payload: paginas,
       });
     } catch (error: unknown) {
-      console.log(error)
       const errores = handleError(error);
       dispatch({
         type: actionTypes.error,
