@@ -38,16 +38,16 @@ console.log('uno')
     });
 
     return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
-  }, [user, emailVerified]);
+  }, [user, emailVerified, handlerSubmit]);
   useEffect(() => {
     console.log('dos')
     dispatch(deleteError());
   }, []);
   // Esta función verifica si el correo ha sido verificado, actualizando solo el estado correspondiente
-  const checkEmailVerification = () => {
-    window.location.reload();
-    navigate("/");
-  };
+  // const checkEmailVerification = () => {
+  //   window.location.reload();
+  //   navigate("/");
+  // };
 
   useEffect(() => {
     console.log('tres')
@@ -81,7 +81,7 @@ console.log('uno')
 
             <section className="flex justify-center items-center m-1 font-bold uppercase">
               <button
-                onClick={checkEmailVerification}
+                // onClick={checkEmailVerification}
                 className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500"
               >
                 confirmar verificacion
