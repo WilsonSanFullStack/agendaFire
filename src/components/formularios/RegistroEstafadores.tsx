@@ -5,9 +5,9 @@ import { RootState } from "../../redux/reducer/index";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import { getPagina } from "../../redux/actions/pagina";
-import { getClientes, postCliente } from "../../redux/actions/clientes";
+import { postEstafadores } from "../../redux/actions/estafadores";
 
-const RegistroClientes = () => {
+const RegistroEstafadores = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<Dispatch<any>>();
   const [showForm, setShowForm] = useState(true);
@@ -17,10 +17,7 @@ const RegistroClientes = () => {
   );
   const paginas = useSelector((state: RootState) => state.pagina.pagina);
   const [registro, setRegistro] = useState({
-    nombre: "",
     userName: "",
-    nacionalidad: "",
-    edad: 18,
     pagina: "",
     creador: "",
     link: "",
@@ -40,12 +37,6 @@ const RegistroClientes = () => {
     }
   }, [getUserById]);
 
-  const handlerNombre = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      nombre: event.target.value,
-    });
-  };
   const handlerUserName = (event: ChangeEvent<HTMLInputElement>) => {
     setRegistro({
       ...registro,
@@ -56,18 +47,6 @@ const RegistroClientes = () => {
     setRegistro({
       ...registro,
       comentarios: event.target.value,
-    });
-  };
-  const handlerNacionalidad = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      nacionalidad: event.target.value,
-    });
-  };
-  const handlerEdad = (event: ChangeEvent<HTMLInputElement>) => {
-    setRegistro({
-      ...registro,
-      edad: parseInt(event.target.value),
     });
   };
   const handlerPagina = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -83,15 +62,9 @@ const RegistroClientes = () => {
     });
   };
 
-  document.querySelectorAll(".no-spin").forEach((input) => {
-    input.addEventListener("wheel", function (event) {
-      event.preventDefault();
-    });
-  });
-
   const handlerSubmit = (event: React.FormEvent) => {
     event?.preventDefault();
-    dispatch(postCliente(registro));
+    dispatch(postEstafadores(registro));
     setShowForm(false);
   };
 
@@ -99,10 +72,7 @@ const RegistroClientes = () => {
     if (errorAxios?.message) {
       setShowForm(true);
     } else if (errorAxios?.message === undefined && showForm === false) {
-      if (getUserById !== null && Array.isArray(getUserById) === false) {
-        dispatch(getClientes(getUserById?.userName));
-      }
-      return navigate("/home");
+      return navigate("/estafadores");
     }
   }, [showForm, errorAxios]);
   return (
@@ -173,17 +143,6 @@ const RegistroClientes = () => {
               </section>
 
               <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="text"
-                  placeholder="Nombre"
-                  value={registro.nombre}
-                  name="nombre"
-                  onChange={handlerNombre}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
                 <textarea
                   // type="s"
                   placeholder="Comentarios"
@@ -192,29 +151,6 @@ const RegistroClientes = () => {
                   onChange={handlerComentarios}
                   rows={5}
                   className="text-black font-bold text-center border-gray-600 border-2 h-auto w-52 resize-none  "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="text"
-                  placeholder="Nacionalidad"
-                  value={registro.nacionalidad}
-                  name="nacionalidad"
-                  onChange={handlerNacionalidad}
-                  className="text-black font-bold text-center border-gray-600 border-2 "
-                />
-              </section>
-
-              <section className="flex justify-center items-center m-1 ">
-                <input
-                  type="number"
-                  placeholder="Edad"
-                  value={registro.edad}
-                  name="edad"
-                  min="1"
-                  onChange={handlerEdad}
-                  className="text-black font-bold text-center border-gray-600 border-2 no-spin"
                 />
               </section>
 
@@ -240,4 +176,4 @@ const RegistroClientes = () => {
   );
 };
 
-export default RegistroClientes;
+export default RegistroEstafadores;

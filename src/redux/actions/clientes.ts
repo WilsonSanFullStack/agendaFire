@@ -5,6 +5,7 @@ import { DB } from "../../firebase/db";
 import {
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   endAt,
   getDoc,
@@ -134,7 +135,6 @@ export const postCliente = (registro: Cliente) => {
           comentarios: registro.comentarios,
           pagina: registro.pagina,
           creador: [registro.creador],
-          estafador: false,
           fechaRegistro: serverTimestamp(),
         });
       }
@@ -148,3 +148,20 @@ export const postCliente = (registro: Cliente) => {
     }
   };
 };
+export const deleteCliente = (eliminar:string) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const deleteDocRef = doc(DB, 'clientes', eliminar)
+      await deleteDoc(deleteDocRef)
+      
+    } catch (error: unknown) {
+      console.log(error);
+      const errores = handleError(error);
+      dispatch({
+        type: actionTypes.error,
+        payload: errores,
+      });
+    }
+  };
+};
+

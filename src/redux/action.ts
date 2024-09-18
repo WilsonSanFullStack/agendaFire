@@ -11,4 +11,7 @@ export enum actionTypes {
   getUserById='getUserById',
   pagina='pagina',
   getEstafador='getEstafador',
+  postEstafador='postEstafador',
+  deleteCliente='deleteCliente',
+  deleteEstafador='deleteEstafador',
 }

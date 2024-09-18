@@ -10,6 +10,7 @@ import Verificacion from "./components/vistas/Verificacion";
 import RegistroPagina from "./components/formularios/RegistrarPagina";
 import { NotFound } from "./components/resources/NotFound";
 import { Estafador } from "./components/vistas/Estafador";
+import RegistroEstafadores from "./components/formularios/RegistroEstafadores";
 
 function App() {
   const location = useLocation();
@@ -28,7 +29,9 @@ function App() {
         <Route path="/actualizar" element={<ActualizarUser />} />
         <Route path="/clientes" element={<RegistroClientes />} />
         <Route path="/pagina" element={<RegistroPagina />} />
-        <Route path="/estafador" element={<Estafador />} />
+        <Route path="/estafadores" element={<Estafador />} />
+        <Route path="/estafador" element={<RegistroEstafadores />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

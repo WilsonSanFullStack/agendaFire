@@ -9,6 +9,7 @@ import { getUserByUID } from "../../redux/actions/user";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducer/index";
 import { deleteError } from "../../redux/actions/deleteError";
+import { getEstafadores } from "../../redux/actions/estafadores";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -86,7 +87,7 @@ const NavBar = () => {
             </button>
           </li>
         </Link>
-        <Link to={"/estafador"}>
+        <Link to={"/estafadores"}>
           <li className="inline-block items-center">
             <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
               estafadores
@@ -95,18 +96,20 @@ const NavBar = () => {
         </Link>
 
         <li className="inline-block items-center">
-          <button
-            onClick={() => setDropdownRegistro(!dropdownRegistro)} // Toggle dropdown
-            className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1"
-          >
-            registro
-          </button>
+          {!dropdownRegistro && (
+            <button
+              onClick={() => setDropdownRegistro(!dropdownRegistro)} // Toggle dropdown
+              className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1"
+            >
+              registro
+            </button>
+          )}
           {/* Dropdown menu */}
           <div
             onMouseLeave={() => setDropdownRegistro(!dropdownRegistro)}
             className={`${
               dropdownRegistro ? "block" : "hidden"
-            } absolute right-52 bg-white shadow-lg rounded-lg mt-1 w-28 z-10 p-2 text-black`}
+            }   bg-white shadow-lg rounded-lg mt-24 w-28 z-10 p-2 text-black`}
           >
             <ul className="text-center text-xs">
               <Link to={"/clientes"}>
@@ -120,28 +123,35 @@ const NavBar = () => {
                   <button className="w-full text-center">Pagina</button>
                 </li>
               </Link>
+              <Link to={"/estafador"}>
+                <li className="p-2 hover:bg-gray-200">
+                  <button className="w-full text-center">Estafador</button>
+                </li>
+              </Link>
               {/* Aquí puedes agregar más opciones si deseas */}
             </ul>
           </div>
         </li>
 
         <li className="relative">
-          <button
-            className="uppercase border-2 hover:bg-green-600 active:bg-blue-500 border-slate-950 rounded-lg px-2"
-            onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown
-            // Toggle dropdown
-          >
-            {getUserById !== null && Array.isArray(getUserById) === false
-              ? getUserById.userName
-              : "Update"}
-          </button>
+          {!dropdownOpen && (
+            <button
+              className="uppercase border-2 hover:bg-green-600 active:bg-blue-500 border-slate-950 rounded-lg px-2"
+              onClick={() => setDropdownOpen(!dropdownOpen)} // Toggle dropdown
+              // Toggle dropdown
+            >
+              {getUserById !== null && Array.isArray(getUserById) === false
+                ? getUserById.userName
+                : "Update"}
+            </button>
+          )}
 
           {/* Dropdown menu */}
           <div
             onMouseLeave={() => setDropdownOpen(!dropdownOpen)}
             className={`${
               dropdownOpen ? "block" : "hidden"
-            } absolute right-0 bg-white shadow-lg rounded-lg mt-1 w-28 z-10 text-black`}
+            } bg-white shadow-lg rounded-lg mt-2 w-28 z-10 text-black`}
           >
             <ul className="text-center text-xs">
               <li className="p-2 hover:bg-gray-100">

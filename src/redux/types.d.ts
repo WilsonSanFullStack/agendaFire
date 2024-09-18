@@ -8,12 +8,12 @@ export interface Clientes {
   nacionalidad: string;
   comentarios: string;
   creador: string[];
-  estafador: boolean;
   fechaRegistro: {
     seconds: number;
     nanoseconds: number;
   };
   pagina: string;
+  link: string;
 }
 export interface Cliente {
   nombre: string;
@@ -22,8 +22,26 @@ export interface Cliente {
   nacionalidad: string;
   comentarios: string;
   creador: string;
-  estafador: boolean;
   pagina: string;
+  link: string
+}
+export interface Estafador {
+  userName: string;
+  comentarios: string;
+  creador: string;
+  pagina: string;
+  link: string;
+}
+export interface Estafadores {
+  userName: string;
+  comentarios: string;
+  creador: string;
+  pagina: string;
+  link: string;
+  fechaRegistro: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 // types for action get clientes
 export type getClientes = string;
@@ -38,10 +56,19 @@ export interface initStateC {
 export type GetEstafadores = string;
 export interface actionGetEstafadores extends Action {
   type: typeof actionTypes.getEstafador;
-  payload: Clientes[];
+  payload: Estafadores[];
 }
 export interface initStateS {
-  getEstafador: Clientes[] | null;
+  getEstafador: Estafadores[] | null;
+}
+// types for action post estafadores
+export type PostEstafadores = string;
+export interface actionPostEstafadores extends Action {
+  type: typeof actionTypes.postEstafador;
+  payload: Estafador[];
+}
+export interface initStateS {
+  getEstafador: Estafador[] | null;
 }
 // types for action get user
 export interface User {

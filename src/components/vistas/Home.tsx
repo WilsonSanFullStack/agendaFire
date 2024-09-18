@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
+  deleteCliente,
   getClientes,
   getClientesBuscar,
   getClientesPag,
@@ -14,7 +15,6 @@ import debounce from "lodash.debounce";
 
 const Home = () => {
   const dispatch = useDispatch<Dispatch<any>>();
-
   const clientes = useSelector(
     (state: RootState) => state.clientes.getClientes
   );
@@ -24,12 +24,18 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getPagina());
-  }, []);
-  const handleGetUser = () => {
+    if (getUserById !== null && Array.isArray(getUserById) === false) {
+      dispatch(getClientes(getUserById?.userName));
+    }
+  }, [getUserById]);
+
+  const handleEliminar = (eliminar: string) => {
+    dispatch(deleteCliente(eliminar));
     if (getUserById !== null && Array.isArray(getUserById) === false) {
       dispatch(getClientes(getUserById?.userName));
     }
   };
+
   const handleGetUserByPag = (pag: string) => {
     if (getUserById !== null && Array.isArray(getUserById) === false) {
       dispatch(
@@ -53,11 +59,6 @@ const Home = () => {
     setNick(value);
     handleBuscar(value);
   };
-  console.log(clientes);
-  if (getUserById !== null && Array.isArray(getUserById) === false) {
-    console.log(getUserById?.userName);
-  }
-  console.log(nick);
   return (
     <div className="text-center items-center p-2 min-h-screen  pt-12">
       <nav className="px-10 min-w-full bg-slate-500">
@@ -106,25 +107,10 @@ const Home = () => {
             />
             <TiZoomOutline className="text-black text-3xl" />
           </li>
-
-          <li className="inline-block items-center">
-            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
-              nombre
-            </button>
-          </li>
-
-          <li className="inline-block items-center">
-            <button className="uppercase border-2  active:border-2 hover:bg-green-600 active:bg-blue-500  hover:border-2 border-slate-950 rounded-lg px-1">
-              nick
-            </button>
-          </li>
         </ul>
       </nav>
 
-      <button onClick={handleGetUser} className="border-white border-2 p-1 ">
-        get cliente
-      </button>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-20">
         {clientes?.map((clientes, x) => {
           const milliseconds =
             (clientes?.fechaRegistro?.seconds ?? 0) * 1000 +
@@ -161,15 +147,26 @@ const Home = () => {
                     {clientes?.comentarios}
                   </section>
                   <section className="absolute bottom-0 w-full flex justify-between px-4 m-0.5">
-                    <button className="uppercase border border-white px-0.5 hover:rounded-lg">estafador</button>
-                    <button className="uppercase border border-white px-0.5 hover:rounded-lg">editar</button>
+                    <button
+                      onClick={() => handleEliminar(clientes.userName)}
+                      className="uppercase border border-white px-0.5 hover:rounded-lg"
+                    >
+                      eliminar
+                    </button>
+                    <button className="uppercase border border-white px-0.5 hover:rounded-lg">
+                      editar
+                    </button>
                   </section>
                 </div>
               </div>
             </div>
           );
         })}
-        {clientes?.length === 0 && <p>Registrar Clientes</p>}
+        {clientes?.length === 0 && (
+          <div className="uppercase text-2xl text-center" >
+            <p>no hay Clientes para mostrar</p>
+          </div>
+        )}
       </div>
     </div>
   );
