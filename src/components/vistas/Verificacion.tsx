@@ -5,8 +5,6 @@ import { Dispatch } from "redux";
 import { RootState } from "../../redux/reducer/index";
 import { auth } from "../../firebase/auth";
 import { verificacionUser } from "../../redux/actions/user";
-import { onAuthStateChanged } from "firebase/auth";
-import { deleteError } from "../../redux/actions/deleteError";
 import { postSession } from "../../redux/actions/session";
 
 const Verificacion = () => {
@@ -19,41 +17,27 @@ const Verificacion = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [user, setUser] = useState<any>(null); // Asegúrate de que el tipo sea correcto
   const handlerSubmit = () => {
+    console.log('first')
     if (user !== null) {
+      console.log('dos')
       dispatch(verificacionUser(user));
-      setShow(true);
+      dispatch(postSession());
+      setTimeout(() =>{
+        console.log('tres')
+        setShow(true);
+        navigate('/')
+      }, 500)
     }
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        setEmailVerified(user.emailVerified);
-      } else {
-        setUser(null);
-        setEmailVerified(false);
-      }
-    });
-
-    return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
-  }, [user, emailVerified, handlerSubmit]);
-  useEffect(() => {
-    dispatch(deleteError());
-  }, []);
-  // Esta función verifica si el correo ha sido verificado, actualizando solo el estado correspondiente
-  const checkEmailVerification = () => {
-    dispatch(postSession())
-    navigate("/");
-  };
-
-  useEffect(() => {
-    if (emailVerified) {
-      setTimeout(() => {
-        navigate("/home");
-      }, 1500);
+useEffect(() => {
+  if (auth.currentUser) {
+    if (auth.currentUser?.emailVerified) {
+      setEmailVerified(auth.currentUser.emailVerified)
     }
-  }, [emailVerified, navigate]);
+    setUser(auth.currentUser)
+  }
+
+}, [user, auth])
 
   return (
     <div className="min-h-screen grid text-center items-center justify-center">
@@ -74,15 +58,6 @@ const Verificacion = () => {
             <section>
               Correo enviado por favor espere una vez realice la verificacion
               del correo por favor oprima el siguiente boton e inicie sesion
-            </section>
-
-            <section className="flex justify-center items-center m-1 font-bold uppercase">
-              <button
-                onClick={checkEmailVerification}
-                className="border-2 rounded-xl p-1 active:bg-stone-500 hover:bg-blue-500 focus:bg-red-500"
-              >
-                confirmar verificacion
-              </button>
             </section>
           </div>
         )}
