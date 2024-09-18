@@ -14,10 +14,10 @@ const Verificacion = () => {
   const errorAxios = useSelector(
     (state: RootState) => state.errorAxios.errorAxios
   );
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [emailVerified, setEmailVerified] = useState(false);
   const [user, setUser] = useState<any>(null); // Asegúrate de que el tipo sea correcto
-
+console.log('uno')
   const handlerSubmit = () => {
     if (user !== null) {
       dispatch(verificacionUser(user));
@@ -26,6 +26,7 @@ const Verificacion = () => {
   };
 
   useEffect(() => {
+    console.log('first')
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
@@ -39,15 +40,17 @@ const Verificacion = () => {
     return () => unsubscribe(); // Limpia el listener cuando el componente se desmonta
   }, [user, emailVerified]);
   useEffect(() => {
+    console.log('dos')
     dispatch(deleteError());
   }, []);
   // Esta función verifica si el correo ha sido verificado, actualizando solo el estado correspondiente
-  const checkEmailVerification = async () => {
+  const checkEmailVerification = () => {
     window.location.reload();
     navigate("/");
   };
 
   useEffect(() => {
+    console.log('tres')
     if (emailVerified) {
       setTimeout(() => {
         navigate("/home");
